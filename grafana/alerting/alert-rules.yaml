@@ -1,0 +1,119 @@
+apiVersion: 1
+
+groups:
+    - orgId: 1
+      name: IOT-evaluation-group
+      folder: IOT-alerts
+      interval: 1m
+      rules:
+        - uid: d83ec0e8-d7c5-42dc-8290-96c00e247b6d
+          title: No data or below zero value in IOT sensors
+          condition: C
+          data:
+            - refId: D
+              relativeTimeRange:
+                from: 300
+                to: 0
+              datasourceUid: a9ce1d89-2908-4868-ad74-56d0cbcfac1a
+              model:
+                datasource:
+                    type: influxdb
+                    uid: a9ce1d89-2908-4868-ad74-56d0cbcfac1a
+                groupBy:
+                    - params:
+                        - friendly_name::tag
+                      type: tag
+                    - params:
+                        - "0"
+                      type: fill
+                intervalMs: 1000
+                maxDataPoints: 43200
+                measurement: prometheus
+                orderByTime: ASC
+                policy: default
+                query: "from(bucket: \"influx/autogen\")\r\n  |> range(start: -1m)\r\n  |> last()\r\n  |> filter(fn: (r) => r._field != \"start_time_unix_nano\")"
+                rawQuery: false
+                refId: D
+                resultFormat: time_series
+                select:
+                    - - params:
+                            - '*'
+                        type: field
+                      - params: []
+                        type: last
+                tags:
+                    - key: state_class::tag
+                      operator: =
+                      value: measurement
+            - refId: B
+              relativeTimeRange:
+                from: 300
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: D
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: B
+                settings:
+                    mode: ""
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 300
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - -1e+28
+                            - 100
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: Alerting
+          execErrState: Alerting
+          for: 1m
+          annotations:
+            description: ""
+            runbook_url: ""
+            summary: ""
+          labels:
+            "": ""
+            type: iot
+          isPaused: false

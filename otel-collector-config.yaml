@@ -1,0 +1,22 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+
+exporters:
+  influxdb:
+    endpoint: http://influxdb:8086
+    bucket: influx
+    token: secrettoken
+    metrics_schema: telegraf-prometheus-v2
+
+service:
+  telemetry:
+    logs:
+      level: debug
+      encoding: json
+
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      exporters: [influxdb]
