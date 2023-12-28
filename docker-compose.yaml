@@ -2,6 +2,7 @@ version: '3.6'
 
 services:
   ha-influx-grafana:
+    restart: always
     build: .
     ports:
       - 8080:8080
