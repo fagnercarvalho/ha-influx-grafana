@@ -7,6 +7,6 @@ contactPoints:
         - uid: e127d87b-4886-461e-a8ee-dcf8fde6a873
           type: email
           settings:
-            addresses: <youremail@email.com>
+            addresses: ${GF_CONTACT_POINTS_EMAIL_ADDRESSES}
             singleEmail: false
           disableResolveMessage: false

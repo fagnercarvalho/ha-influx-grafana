@@ -56,7 +56,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${DS_INFLUXDB}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -113,7 +113,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 7,
         "w": 24,
         "x": 0,
         "y": 0
@@ -135,12 +135,13 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
+            "uid": "influxdb"
           },
           "groupBy": [],
           "measurement": "prometheus",
           "orderByTime": "ASC",
           "policy": "default",
+          "query": "from(bucket: \"influx/autogen\")\r\n  |> range(start: -30m)\r\n  |> filter(fn: (r) => r._field != \"start_time_unix_nano\" and r.device_class == \"humidity\")",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -164,7 +165,239 @@
           "tags": []
         }
       ],
-      "title": "Humidity",
+      "title": "Humidity sensors",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb"
+          },
+          "groupBy": [],
+          "measurement": "prometheus",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"influx/autogen\")\r\n  |> range(start: -30m)\r\n  |> filter(fn: (r) => r._field != \"start_time_unix_nano\" and r.device_class == \"temperature\")",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "sensor.ikea_of_sweden_vindstyrka_humidity"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "sensor.sonoff_temperature_sensor_humidity"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Temperature sensors",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb"
+          },
+          "groupBy": [],
+          "measurement": "prometheus",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"influx/autogen\")\r\n  |> range(start: -30m)\r\n  |> filter(fn: (r) => r._field != \"start_time_unix_nano\" and not exists r.device_class)",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "sensor.ikea_of_sweden_vindstyrka_humidity"
+                ],
+                "type": "field"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "sensor.sonoff_temperature_sensor_humidity"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Other sensors",
       "transformations": [],
       "type": "timeseries"
     }
@@ -176,13 +409,13 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "IOT",
   "uid": "dc32c5d5-bf6a-4003-a586-0179d17d1d53",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

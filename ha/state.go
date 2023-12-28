@@ -10,6 +10,9 @@ import (
 )
 
 var (
+	StateClassAttribute   = "state_class"
+	StateClassMeasurement = "measurement"
+
 	ErrHomeAssistantRequest       = errors.New("error when trying to get states from Home Assistant API")
 	ErrHomeAssistantReadBody      = errors.New("error when trying to read body from Home Assistant API response")
 	ErrHomeAssistantJSONUnmarshal = errors.New("error when trying to unmarshal JSON from Home Assistant API response")
@@ -31,7 +34,7 @@ func NewHomeAssistant(serverURL, token string) HomeAssistant {
 	return HomeAssistant{serverURL: serverURL, token: token}
 }
 
-func (ha HomeAssistant) GetStates(ctx context.Context) ([]State, error) {
+func (ha HomeAssistant) GetStates(ctx context.Context, f State) ([]State, error) {
 	client := http.Client{}
 
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, ha.serverURL, nil)
@@ -56,6 +59,8 @@ func (ha HomeAssistant) GetStates(ctx context.Context) ([]State, error) {
 	if err != nil {
 		return nil, errors.Join(ErrHomeAssistantJSONUnmarshal, err)
 	}
+
+	states = filter(states, f)
 
 	return states, nil
 }
@@ -87,4 +92,23 @@ func (ha HomeAssistant) GetStateByEntityID(ctx context.Context, entityID string)
 	}
 
 	return state, nil
+}
+
+func filter(states []State, filter State) []State {
+	var filteredStates []State
+
+	for _, state := range states {
+		var noMatchingAttribute bool
+		for key, value := range filter.Attributes {
+			if state.Attributes[key] != value {
+				noMatchingAttribute = true
+			}
+		}
+
+		if !noMatchingAttribute {
+			filteredStates = append(filteredStates, state)
+		}
+	}
+
+	return filteredStates
 }

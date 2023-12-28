@@ -2,10 +2,10 @@ package metrics
 
 import (
 	"context"
-	"go.opentelemetry.io/otel/attribute"
 	"time"
 
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
 	api "go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/sdk/metric"
@@ -30,7 +30,7 @@ type Gauge struct {
 	otelMeter api.Meter
 }
 
-func New() (Meter, error) {
+func New(otelCollectorURL string) (Meter, error) {
 	ctx := context.Background()
 
 	resources := resource.NewWithAttributes(
@@ -39,7 +39,7 @@ func New() (Meter, error) {
 		semconv.ServiceVersionKey.String("v0.0.0"),
 	)
 
-	otlpExporter, err := otlpmetrichttp.New(ctx, otlpmetrichttp.WithEndpoint("localhost:4318"), otlpmetrichttp.WithInsecure())
+	otlpExporter, err := otlpmetrichttp.New(ctx, otlpmetrichttp.WithEndpoint(otelCollectorURL), otlpmetrichttp.WithInsecure())
 	if err != nil {
 		return Meter{}, err
 	}

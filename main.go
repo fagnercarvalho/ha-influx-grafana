@@ -4,55 +4,49 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
+	"os"
+	"strconv"
+
 	"github.com/fagnercarvalho/ha-influx-grafana/ha"
 	"github.com/fagnercarvalho/ha-influx-grafana/metrics"
-	"strconv"
 )
 
 var (
-	StateClassMeasurement       = "measurement"
-	ErrParseState         error = errors.New("error while trying to parse state")
+	UnitOfMeasurementAttribute = "unit_of_measurement"
+
+	ErrParseState = errors.New("error while trying to parse state")
 )
 
 func main() {
-	// [x] create grafana influx datasource
-	// [x] fix influx flow to OTEL
-	// [x] filter by state class instead of measurement name
-	// [x] push measurements to influx
-
-	// push to Ubuntu server
-
-	// hide secrets in .env and GitHub secrets
-	// make sure I can push to GitHub
-
-	// create readme
-	// consider making repo public?
-
-	// https://docs.influxdata.com/influxdb/v1.3/concepts/key_concepts/
-	// grafana SELECT "gauge" FROM "autogen"."bar"
-
-	serverURL := ""
-	token := ""
+	homeAssistantURL := os.Getenv("HA_URL")
+	homeAssistantToken := os.Getenv("HA_TOKEN")
+	otelCollectorURL := os.Getenv("OTEL_COLLECTOR_URL")
 
 	ctx := context.Background()
 
-	meter, err := metrics.New()
+	meter, err := metrics.New(otelCollectorURL)
 	if err != nil {
 		panic(err)
 	}
 
-	homeAssistant := ha.NewHomeAssistant(serverURL, token)
-	states, err := homeAssistant.GetStates(ctx)
+	homeAssistant := ha.NewHomeAssistant(homeAssistantURL, homeAssistantToken)
+
+	filter := ha.State{
+		Attributes: map[string]interface{}{
+			ha.StateClassAttribute: ha.StateClassMeasurement,
+		},
+	}
+
+	states, err := homeAssistant.GetStates(ctx, filter)
 	if err != nil {
 		panic(err)
 	}
 
-	filteredStates := filterByStateClass(states, StateClassMeasurement)
-
-	for _, filteredState := range filteredStates {
-		newFilteredState := filteredState
+	for _, state := range states {
+		newState := state
 		getMetric := func() (metrics.Metric, error) {
-			state, err := homeAssistant.GetStateByEntityID(ctx, newFilteredState.EntityID)
+			state, err := homeAssistant.GetStateByEntityID(ctx, newState.EntityID)
 			if err != nil {
 				return metrics.Metric{}, err
 			}
@@ -85,19 +79,7 @@ func main() {
 		}
 	}
 
-	fmt.Scanln()
-}
-
-func filterByStateClass(states []ha.State, stateClass string) []ha.State {
-	var filteredStates []ha.State
-
-	for _, state := range states {
-		if state.Attributes["state_class"] == stateClass {
-			filteredStates = append(filteredStates, state)
-		}
-	}
-
-	return filteredStates
+	startHTTPServer()
 }
 
 func convertToMetric(state ha.State) (metrics.Metric, error) {
@@ -117,7 +99,7 @@ func convertToMetric(state ha.State) (metrics.Metric, error) {
 	for attribute, value := range state.Attributes {
 		metric.Attributes[attribute] = value
 
-		if attribute == "unit_of_measurement" {
+		if attribute == UnitOfMeasurementAttribute {
 			value, ok := value.(string)
 			if ok {
 				metric.Unit = convertUnitToUCUM(value)
@@ -141,4 +123,15 @@ func convertUnitToUCUM(unit string) string {
 	}
 
 	return unit
+}
+
+func startHTTPServer() {
+	http.HandleFunc("/_status", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "OK")
+	})
+
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		panic(err)
+	}
 }

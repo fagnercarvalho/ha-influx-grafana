@@ -1,6 +1,16 @@
 version: '3.6'
 
 services:
+  ha-influx-grafana:
+    build: .
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    network_mode: bridge
+    depends_on:
+      - otel-collector
+
   influxdb:
     image: influxdb:1.8-alpine
     restart: always
@@ -20,6 +30,8 @@ services:
     restart: always
     depends_on:
       - influxdb
+    env_file:
+      - .env.grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
@@ -33,6 +45,7 @@ services:
       - ./grafana/datasources:/etc/grafana/provisioning/datasources
       - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
       - ./grafana/alerting:/etc/grafana/provisioning/alerting
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.84.0
