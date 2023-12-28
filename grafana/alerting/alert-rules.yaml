@@ -14,11 +14,11 @@ groups:
               relativeTimeRange:
                 from: 300
                 to: 0
-              datasourceUid: a9ce1d89-2908-4868-ad74-56d0cbcfac1a
+              datasourceUid: influxdb
               model:
                 datasource:
                     type: influxdb
-                    uid: a9ce1d89-2908-4868-ad74-56d0cbcfac1a
+                    uid: influxdb
                 groupBy:
                     - params:
                         - friendly_name::tag

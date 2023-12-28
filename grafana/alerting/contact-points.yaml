@@ -2,7 +2,7 @@ apiVersion: 1
 
 contactPoints:
     - orgId: 1
-      name: grafana-default-email
+      name: grafana-alert-emails
       receivers:
         - uid: e127d87b-4886-461e-a8ee-dcf8fde6a873
           type: email
