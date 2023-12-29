@@ -141,7 +141,7 @@
           "measurement": "prometheus",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"influx/autogen\")\r\n  |> range(start: -30m)\r\n  |> filter(fn: (r) => r._field != \"start_time_unix_nano\" and r.device_class == \"humidity\")",
+          "query": "from(bucket: \"influx/autogen\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._field != \"start_time_unix_nano\" and r.device_class == \"humidity\")",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -257,7 +257,7 @@
           "measurement": "prometheus",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"influx/autogen\")\r\n  |> range(start: -30m)\r\n  |> filter(fn: (r) => r._field != \"start_time_unix_nano\" and r.device_class == \"temperature\")",
+          "query": "from(bucket: \"influx/autogen\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._field != \"start_time_unix_nano\" and r.device_class == \"temperature\")",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -373,7 +373,7 @@
           "measurement": "prometheus",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"influx/autogen\")\r\n  |> range(start: -30m)\r\n  |> filter(fn: (r) => r._field != \"start_time_unix_nano\" and not exists r.device_class)",
+          "query": "from(bucket: \"influx/autogen\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._field != \"start_time_unix_nano\" and not exists r.device_class)",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
