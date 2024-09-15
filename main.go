@@ -137,3 +137,12 @@ func startHTTPServer() {
 		panic(err)
 	}
 }
+
+/*
+query to get air quality greater than x
+
+from(bucket: "influx/autogen")
+  |> range(start: -1m)
+  |> last()
+  |> filter(fn: (r) => r._field != "start_time_unix_nano" and r["unit_of_measurement"] == "µg/m³" and r._value > 300)
+*/
