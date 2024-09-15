@@ -85,7 +85,9 @@ func main() {
 func convertToMetric(state ha.State) (metrics.Metric, error) {
 	parsedState, err := strconv.ParseFloat(state.State, 64)
 	if err != nil {
-		return metrics.Metric{}, errors.Join(ErrParseState, err)
+		fmt.Printf("Error to parse state for %v: %v. Using -1 as state value \n", state.EntityID, err)
+
+		parsedState = -1
 	}
 
 	metric := metrics.Metric{
@@ -107,7 +109,7 @@ func convertToMetric(state ha.State) (metrics.Metric, error) {
 		}
 	}
 
-	fmt.Println(metric)
+	fmt.Println("Converted Home Assistance state to OTel metric", metric)
 
 	return metric, nil
 }
