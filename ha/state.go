@@ -13,6 +13,9 @@ var (
 	StateClassAttribute   = "state_class"
 	StateClassMeasurement = "measurement"
 
+	DeviceClassAttribute = "device_class"
+	DeviceClassMoisture  = "moisture"
+
 	ErrHomeAssistantRequest       = errors.New("error when trying to get states from Home Assistant API")
 	ErrHomeAssistantReadBody      = errors.New("error when trying to read body from Home Assistant API response")
 	ErrHomeAssistantJSONUnmarshal = errors.New("error when trying to unmarshal JSON from Home Assistant API response")
@@ -95,17 +98,21 @@ func (ha HomeAssistant) GetStateByEntityID(ctx context.Context, entityID string)
 }
 
 func filter(states []State, filter State) []State {
+	if filter.Attributes == nil || len(filter.Attributes) == 0 {
+		return states
+	}
+
 	var filteredStates []State
 
 	for _, state := range states {
-		var noMatchingAttribute bool
+		var matchingAttribute bool
 		for key, value := range filter.Attributes {
-			if state.Attributes[key] != value {
-				noMatchingAttribute = true
+			if state.Attributes[key] == value {
+				matchingAttribute = true
 			}
 		}
 
-		if !noMatchingAttribute {
+		if matchingAttribute {
 			filteredStates = append(filteredStates, state)
 		}
 	}

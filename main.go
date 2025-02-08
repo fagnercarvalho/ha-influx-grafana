@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -12,11 +11,7 @@ import (
 	"github.com/fagnercarvalho/ha-influx-grafana/metrics"
 )
 
-var (
-	UnitOfMeasurementAttribute = "unit_of_measurement"
-
-	ErrParseState = errors.New("error while trying to parse state")
-)
+var UnitOfMeasurementAttribute = "unit_of_measurement"
 
 func main() {
 	homeAssistantURL := os.Getenv("HA_URL")
@@ -83,7 +78,9 @@ func main() {
 }
 
 func convertToMetric(state ha.State) (metrics.Metric, error) {
-	parsedState, err := strconv.ParseFloat(state.State, 64)
+	stateAsInt := convertOnOffToInteger(state.State)
+
+	parsedState, err := strconv.ParseFloat(stateAsInt, 64)
 	if err != nil {
 		fmt.Printf("Error to parse state for %v: %v. Using -1 as state value \n", state.EntityID, err)
 
@@ -125,6 +122,16 @@ func convertUnitToUCUM(unit string) string {
 	}
 
 	return unit
+}
+
+func convertOnOffToInteger(state string) string {
+	if state == "on" {
+		return "1"
+	} else if state == "off" {
+		return "0"
+	}
+
+	return state
 }
 
 func startHTTPServer() {

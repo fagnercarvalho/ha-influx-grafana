@@ -1,0 +1,89 @@
+[
+  {
+    "entity_id": "binary_sensor.motion_sensor",
+    "state": "off",
+    "attributes": {
+      "device_class": "motion",
+      "friendly_name": "Motion sensor"
+    },
+    "last_updated": "2025-02-08T00:37:32.608093Z"
+  },
+  {
+    "entity_id": "binary_sensor.water_leakage_sensor",
+    "state": "off",
+    "attributes": {
+      "device_class": "moisture",
+      "friendly_name": "Water Leakage sensor"
+    },
+    "last_updated": "2025-02-02T00:25:55.373808Z"
+  },
+  {
+    "entity_id": "sensor.temperature_sensor",
+    "state": "19.0",
+    "attributes": {
+      "device_class": "temperature",
+      "friendly_name": "Temperature sensor",
+      "state_class": "measurement",
+      "unit_of_measurement": "°C"
+    },
+    "last_updated": "2025-02-07T23:32:45.222716Z"
+  },
+  {
+    "entity_id": "sensor.humidity_sensor",
+    "state": "32.5",
+    "attributes": {
+      "device_class": "humidity",
+      "friendly_name": "Humidity sensor",
+      "state_class": "measurement",
+      "unit_of_measurement": "%"
+    },
+    "last_updated": "2025-02-08T01:18:02.511431Z"
+  },
+  {
+    "entity_id": "sensor.air_quality_sensor",
+    "state": "1",
+    "attributes": {
+      "friendly_name": "Air Quality sensor",
+      "state_class": "measurement",
+      "unit_of_measurement": "µg/m³"
+    },
+    "last_updated": "2025-02-07T22:55:45.471335Z"
+  },
+  {
+    "entity_id": "sensor.motion_sensor_battery",
+    "state": "47",
+    "attributes": {
+      "battery_quantity": 2,
+      "battery_size": "CR2032",
+      "battery_voltage": 2.7,
+      "device_class": "battery",
+      "friendly_name": "Motion sensor battery",
+      "state_class": "measurement",
+      "unit_of_measurement": "%"
+    },
+    "last_updated": "2025-02-06T16:02:52.835205Z"
+  },
+  {
+    "entity_id": "automation.turn_on_lights",
+    "state": "on",
+    "attributes": {
+      "current": 0,
+      "friendly_name": "Turn on lights",
+      "id": "1726459879783",
+      "last_triggered": "2025-02-06T16:44:18.908528+00:00",
+      "mode": "single"
+    },
+    "last_updated": "2025-02-06T16:44:19.099829Z"
+  },
+  {
+    "entity_id": "sensor.soil_moisture",
+    "state": "unknown",
+    "attributes": {
+      "device_class": "moisture",
+      "friendly_name": "Soil Moisture",
+      "state_class": "measurement",
+      "unit_of_measurement": "%"
+    },
+    "last_updated": "2025-02-02T00:55:54.163835Z"
+  }
+]
