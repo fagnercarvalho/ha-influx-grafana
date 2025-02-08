@@ -1,0 +1,9 @@
+{
+  "entity_id": "binary_sensor.motion_sensor",
+  "state": "off",
+  "attributes": {
+    "device_class": "motion",
+    "friendly_name": "Motion sensor"
+  },
+  "last_updated": "2025-02-08T00:37:32.608093Z"
+}
