@@ -9,6 +9,13 @@ exporters:
     bucket: influx
     token: secrettoken
     metrics_schema: telegraf-prometheus-v2
+  prometheus:
+    endpoint: "0.0.0.0:1234"
+    namespace: ha-sensors
+    send_timestamps: true
+    metric_expiration: 180m
+    resource_to_telemetry_conversion:
+      enabled: true
 
 service:
   telemetry:
@@ -19,4 +26,4 @@ service:
   pipelines:
     metrics:
       receivers: [otlp]
-      exporters: [influxdb]
+      exporters: [influxdb, prometheus]

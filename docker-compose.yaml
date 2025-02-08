@@ -28,7 +28,7 @@ services:
       - ./influx:/etc/influxdb
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:11.5.1
     restart: always
     depends_on:
       - influxdb
@@ -60,6 +60,19 @@ services:
     ports:
       - "4318:4318"   # OTLP gRPC receiver
 
+  prometheus:
+    image: prom/prometheus:v3.1.0
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
+
 volumes:
   grafana_data: {}
   influxdb_data: {}
+  prom_data: {}
