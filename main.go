@@ -28,7 +28,8 @@ func main() {
 
 	filter := ha.State{
 		Attributes: map[string]interface{}{
-			ha.StateClassAttribute: ha.StateClassMeasurement,
+			ha.StateClassAttribute:  ha.StateClassMeasurement,
+			ha.DeviceClassAttribute: ha.DeviceClassMoisture,
 		},
 	}
 
