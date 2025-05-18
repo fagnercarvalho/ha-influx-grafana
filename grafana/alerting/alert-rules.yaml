@@ -275,7 +275,7 @@ groups:
                 conditions:
                   - evaluator:
                       params:
-                        - 30
+                        - 10
                         - 0
                       type: lt
                     operator:
